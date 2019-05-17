@@ -12,13 +12,55 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BruteCollinearPoints {
-    private ArrayList<LineSegment> lineSegments;
+    private LineSegment[] segments;
+
+
     public BruteCollinearPoints(Point[] points) {
         if (points == null) {
             throw new java.lang.IllegalArgumentException();
         }
-        // repeat check
-        lineSegments = new ArrayList<LineSegment>();
+
+        ArrayList<LineSegment> lineSegments = new ArrayList<LineSegment>();
+
+        assert isDuplicates(points);
+
+        Arrays.sort(points);
+        for (int p = 0; p < points.length; p++) {
+            for (int q = p + 1; q < points.length; q++){
+                    for (int r = q + 1; r < points.length; r++) {
+                            for (int s = r + 1; s < points.length; s++) {
+
+
+                                    Point pP = points[p];
+                                    Point qP = points[q];
+                                    Point rP = points[r];
+                                    Point sP = points[s];
+
+                                    double pq = pP.slopeTo(qP);
+                                    double pr = pP.slopeTo(rP);
+                                    double ps = pP.slopeTo(sP);
+
+
+                                    if ((pq == pr) && (pr == ps)) {
+                                        lineSegments.add(new LineSegment(pP, sP));
+                                    }
+
+                        }
+                    }
+
+            }
+        }
+        this.segments = lineSegments.toArray(new LineSegment[lineSegments.size()]);
+    }
+    public int numberOfSegments() {
+        return segments.length;
+    }
+
+    public LineSegment[] segments() {
+        return this.segments;
+    }
+
+    private boolean isDuplicates(Point[] points){
         for (int i = 0; i < points.length; i++) {
             if (points[i] == null) {
                 throw new java.lang.IllegalArgumentException();
@@ -30,61 +72,8 @@ public class BruteCollinearPoints {
                 }
             }
         }
-        Arrays.sort(points);
-        for (int p = 0; p < points.length; p++) {
-            for (int q = 0; q < points.length; q++) {
-                if (q != p) {
-                    for (int r = 0; r < points.length; r++) {
-                        if (r != q && r != p) {
-                            for (int s = 0; s < points.length; s++) {
-                                if (s != r && s != q && s != p) {
-                                    Point pP = points[p];
-                                    Point qP = points[q];
-                                    Point rP = points[r];
-                                    Point sP = points[s];
 
-                                    double pq = pP.slopeTo(qP);
-                                    double pr = pP.slopeTo(rP);
-                                    double ps = pP.slopeTo(sP);
-                                    System.out.println("/////////");
-                                    System.out.println(pP.toString() + "   " + qP.toString() + "   " + rP.toString() + "   " +
-                                                               sP.toString());
-
-
-
-                                    if ((pq == pr) && (pr == ps)) {
-                                        if ((pP.compareTo(qP) == -1) && (qP.compareTo(rP) == -1) &&
-                                                (rP.compareTo(sP) == -1)) {
-                                            lineSegments.add(new LineSegment(pP, sP));
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // need to filter and cut down list of segments based on endpoints
-    }
-    public int numberOfSegments() {
-        return lineSegments.size();
-    }
-
-    public LineSegment[] segments() {
-        LineSegment[] ls = new LineSegment[lineSegments.size()];
-        for (int i = 0;i < ls.length;i++) {
-            ls[i] = lineSegments.get(i);
-        }
-        return ls;
-    }
-
-    public void printLines() {
-        for (LineSegment l : lineSegments) {
-            System.out.println(l.toString());
-        }
+        return true;
     }
 
     public static void main(String[] args) {
@@ -108,8 +97,7 @@ public class BruteCollinearPoints {
         StdDraw.show();
 
         BruteCollinearPoints bcp = new BruteCollinearPoints(points);
-        bcp.printLines();
-        for (LineSegment ls : bcp.lineSegments) {
+        for (LineSegment ls : bcp.segments()) {
             StdOut.println(ls);
             ls.draw();
         }
