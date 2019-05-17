@@ -32,33 +32,36 @@ public class BruteCollinearPoints {
         }
         Arrays.sort(points);
         for (int p = 0; p < points.length; p++) {
-            for (int q = p + 1; q < points.length; q++) {
-                for (int r = q + 1; r < points.length; r++) {
-                    for (int s = r + 1; s < points.length; s++) {
-                        // check whether the three slopes between p and q, between p and r,
-                        // and between p and s are all equal
+            for (int q = 0; q < points.length; q++) {
+                if (q != p) {
+                    for (int r = 0; r < points.length; r++) {
+                        if (r != q && r != p) {
+                            for (int s = 0; s < points.length; s++) {
+                                if (s != r && s != q && s != p) {
+                                    Point pP = points[p];
+                                    Point qP = points[q];
+                                    Point rP = points[r];
+                                    Point sP = points[s];
 
-                        // get slopes of the 3
-                        // if pq, pr, ps are all the same, add only one lineseg
-                        // else add any individual segments as well
+                                    double pq = pP.slopeTo(qP);
+                                    double pr = pP.slopeTo(rP);
+                                    double ps = pP.slopeTo(sP);
+                                    System.out.println("/////////");
+                                    System.out.println(pP.toString() + "   " + qP.toString() + "   " + rP.toString() + "   " +
+                                                               sP.toString());
 
 
 
-                        Point pP = points[p];
-                        Point qP = points[q];
-                        Point rP = points[r];
-                        Point sP = points[s];
+                                    if ((pq == pr) && (pr == ps)) {
+                                        if ((pP.compareTo(qP) == -1) && (qP.compareTo(rP) == -1) &&
+                                                (rP.compareTo(sP) == -1)) {
+                                            lineSegments.add(new LineSegment(pP, sP));
+                                        }
+                                    }
+                                }
 
-                        //Arrays.sort(points);
-
-                        double pq = pP.slopeTo(qP);
-                        double pr = pP.slopeTo(rP);
-                        double ps = pP.slopeTo(sP);
-
-                        if ((pq == pr) && (pr == ps)) {
-                            lineSegments.add(new LineSegment(pP, sP));
+                            }
                         }
-
                     }
                 }
             }
