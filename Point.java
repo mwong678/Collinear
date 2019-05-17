@@ -2,7 +2,7 @@
  *  Compilation:  javac Point.java
  *  Execution:    java Point
  *  Dependencies: none
- *  
+ *
  *  An immutable data type for points in the plane.
  *  For use on Coursera, Algorithms Part I programming assignment.
  *
@@ -10,12 +10,13 @@
 
 import edu.princeton.cs.algs4.StdDraw;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
-public class Point implements Comparable<Point> {
+public class Point implements Comparable <Point> {
 
-    private final int x;     // x-coordinate of this point
-    private final int y;     // y-coordinate of this point
+    private final int x; // x-coordinate of this point
+    private final int y; // y-coordinate of this point
 
     /**
      * Initializes a new point.
@@ -60,16 +61,16 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        double x_delta = that.x - this.x;
-        double y_delta = that.y - this.y;
+        double xDelta = that.x - this.x;
+        double yDelta = that.y - this.y;
 
-        if (x_delta == 0 && y_delta == 0){
-            //same point
+        if (xDelta == 0 && yDelta == 0) {
+            // same point
             return Double.NEGATIVE_INFINITY;
-        }else if (x_delta == 0){
+        } else if (xDelta == 0) {
             return Double.POSITIVE_INFINITY;
-        }else{
-            return y_delta / x_delta;
+        } else {
+            return yDelta / xDelta;
         }
     }
 
@@ -86,16 +87,16 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
-        if (this.y < that.y){
+        if (this.y < that.y) {
             return -1;
-        }else if (this.y > that.y){
+        } else if (this.y > that.y) {
             return 1;
-        }else{
-            if (this.x < that.x){
+        } else {
+            if (this.x < that.x) {
                 return -1;
-            }else if (this.x > that.x){
-                return -1;
-            }else{
+            } else if (this.x > that.x) {
+                return 1;
+            } else {
                 return 0;
             }
         }
@@ -107,19 +108,19 @@ public class Point implements Comparable<Point> {
      *
      * @return the Comparator that defines this ordering on points
      */
-    public Comparator<Point> slopeOrder() {
+    public Comparator <Point> slopeOrder() {
         return new BySlope();
     }
 
-    private class BySlope implements Comparator<Point>{
-        public int compare(Point a, Point b){
-            double slope_A = slopeTo(a);
-            double slope_B = slopeTo(b);
-            if (slope_A < slope_B){
+    private class BySlope implements Comparator <Point> {
+        public int compare(Point a, Point b) {
+            double slopeA = slopeTo(a);
+            double slopeB = slopeTo(b);
+            if (slopeA < slopeB) {
                 return -1;
-            }else if (slope_A > slope_B){
+            } else if (slopeA > slopeB) {
                 return 1;
-            }else{
+            } else {
                 return 0;
             }
         }
@@ -142,20 +143,27 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-       Point a = new Point(0,0);
-       Point b = new Point(4,4);
-       Point c = new Point(1,2);
-        Point d = new Point(0,5);
-       System.out.println(a.compareTo(b)); // -1
-       System.out.println(b.compareTo(c)); // 1
-       System.out.println(a.compareTo(a)); //0
-        System.out.println(a.slopeTo(b));  // 1
+        Point a = new Point(0, 10);
+        Point b = new Point(4, 10);
+        Point c = new Point(1, 10);
+        Point d = new Point(0, 10);
+        Point[] l = new Point[]{a,b,c,d};
+        Arrays.sort(l);
+        for ( Point p : l){
+            System.out.println(p.toString());
+        }
+
+
+        System.out.println(a.compareTo(b)); // -1
+        System.out.println(b.compareTo(c)); // 1
+        System.out.println(a.compareTo(a)); //0
+        System.out.println(a.slopeTo(b)); // 1
         System.out.println(a.slopeTo(a)); // neg inf
         System.out.println(a.slopeTo(d)); // pos inf
-        Comparator<Point> cp = a.slopeOrder();
-        System.out.println(cp.compare(b,c)); // -1
-        System.out.println(cp.compare(d,b)); // 1
-        System.out.println(cp.compare(b,b)); // 0
-        System.out.println(cp.compare(a,b)); // -1
+        Comparator <Point> cp = a.slopeOrder();
+        System.out.println(cp.compare(b, c)); // -1
+        System.out.println(cp.compare(d, b)); // 1
+        System.out.println(cp.compare(b, b)); // 0
+        System.out.println(cp.compare(a, b)); // -1
     }
 }
